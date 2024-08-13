@@ -17,6 +17,10 @@ const sectionVideos = {
 
 type SectionName = 'home' | 'about' | 'services' | 'studio' | 'people' | 'blog';
 
+const isSectionName = (section: string): section is SectionName => {
+  return ['home', 'about', 'services', 'studio', 'people', 'blog'].includes(section);
+};
+
 type ActiveContent = {
   h1: string;
   p: string | string[];
@@ -38,15 +42,18 @@ const Home = () => {
     console.log("Menu state changed:", mobileMenuOpen);
   }, [mobileMenuOpen]);
 
-  const handleNavClick = (section: SectionName) => {
-    console.log("Changing to section:", section);
-    setActiveSection(section);
-    if (section !== 'home') {
-      setShowMenu(false);
-      const content = getContentDescription(section);
-      setActiveContent(content);
+  const handleNavClick = (section: string) => {
+    if (isSectionName(section)) {
+      setActiveSection(section);
+      if (section !== 'home') {
+        setShowMenu(false);
+        const content = getContentDescription(section);
+        setActiveContent(content);
+      } else {
+        setShowMenu(true);
+      }
     } else {
-      setShowMenu(true);
+      console.error(`Invalid section name: ${section}`);
     }
   };
 
