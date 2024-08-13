@@ -85,7 +85,7 @@ const Home = () => {
           p: [
             "Pulp is a group of seasoned executives, young professionals, and students. Our culture is all about harmonizing experience with fresh perspective.",
             "Shah Ullah, Founder & CEO",
-            "Jeff Harris, Chairman & Chief of Partnerships"
+            "Jeff Harris, Chief of Partnerships"
           ]
         };
       case 'people':
