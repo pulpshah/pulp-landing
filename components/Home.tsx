@@ -8,11 +8,11 @@ import { useTransition, animated } from 'react-spring';
 
 const sectionVideos = {
   home: "/img/planeVid.mp4",
-  about: "/img/studio.mp4",
-  services: "/img/brain.mp4",
-  studio: "/img/studio.mp4",
-  people: "/img/people.mp4",
-  blog: "/img/blog.mp4"
+  about: "/img/brain.mp4",
+  services: "/img/sea.mp4",
+  studio: "/img/telescope.mp4",
+  people: "/img/square.mp4",
+  blog: "/img/studio.mp4"
 };
 
 type SectionName = 'home' | 'about' | 'services' | 'studio' | 'people' | 'blog';
@@ -73,18 +73,36 @@ const Home = () => {
         };
       case 'services':
         return {
-          h1: "Experience Information",
-          p: "Pulp is boutique information design firm focused on conversation modeling, interaction design, and metadataWe collaborate with interdisciplinary experts to build interactive software that can analyze rhetoric, visualize sentiment, and inform decision-making at any scale."
+          h1: "Services & Specialties",
+          p: [
+            "Pulp delivers precision in conversation design, transforming analysis into actionable insights and interactive experiences that resonate.",
+            "We offer a range of specialized services, from conversation modeling, advanced sentiment analysis, advertising technology, price prediction, and more."
+          ]
         };
-      case 'portfolio':
+      case 'studio':
         return {
-          h1: "Our Work",
-          p: "View our impressive portfolio of completed projects and success stories."
+          h1: "People and Partnerships",
+          p: [
+            "Pulp is a group of seasoned executives, young professionals, and students. Our culture is all about harmonizing experience with fresh perspective.",
+            "Shah Ullah, Founder & CEO",
+            "Jeff Harris, Chairman & Chief of Partnerships"
+          ]
         };
-      case 'contact':
+      case 'people':
         return {
-          h1: "Get in Touch",
-          p: "Contact us for inquiries, collaborations, or support."
+          h1: "Research & Digital Civis",
+          p: [
+            "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can’t wait.",
+            "As digital and civic engagement converge, we aim to build product experiences that offset cognitive load and distorted decision-making. ",
+          ]
+        };
+      case 'blog':
+        return {
+          h1: "Studio & Products",
+          p: [
+            "PWe are always excited to meet business owners that have complicated product ideas. Pulp loves to work with other companies that are committed to decreasing the cognitive load on their users.",
+            "Our studio is where experimentation meets execution. We engineer products that challenge norms and elevate the information experience. ",
+          ]
         };
       default:
         return {
