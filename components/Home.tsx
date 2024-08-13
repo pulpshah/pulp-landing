@@ -90,7 +90,7 @@ const Home = () => {
         };
       case 'people':
         return {
-          h1: "Research & Digital Civis",
+          h1: "Research & Digital Civics",
           p: [
             "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can't wait.",
             "As digital and civic engagement converge, we aim to build product experiences that offset cognitive load and distorted decision-making. ",
@@ -100,7 +100,7 @@ const Home = () => {
         return {
           h1: "Studio & Products",
           p: [
-            "PWe are always excited to meet business owners that have complicated product ideas. Pulp loves to work with other companies that are committed to decreasing the cognitive load on their users.",
+            "We are always excited to meet business owners that have complicated product ideas. Pulp loves to work with other companies that are committed to decreasing the cognitive load on their users.",
             "Our studio is where experimentation meets execution. We engineer products that challenge norms and elevate the information experience. ",
           ]
         };
