@@ -92,7 +92,7 @@ const Home = () => {
         return {
           h1: "Research & Digital Civis",
           p: [
-            "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can’t wait.",
+            "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can't wait.",
             "As digital and civic engagement converge, we aim to build product experiences that offset cognitive load and distorted decision-making. ",
           ]
         };
@@ -193,13 +193,13 @@ const Home = () => {
         {/* Section content */}
         <div className={`absolute inset-0 flex flex-col justify-center items-start px-20 transition-opacity duration-500 ease-in-out ${!showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-10`}>
           <div className="text-white">
-            <h2 className="text-3xl mb-6 text-left">{activeContent.h1}</h2>
+            <h2 className="text-4xl lg:text-5xl mb-6 text-left">{activeContent.h1}</h2>
             {Array.isArray(activeContent.p) ? (
               activeContent.p.map((paragraph, index) => (
-                <p key={index} className="text-xl mb-4 text-left">{paragraph}</p>
+                <p key={index} className="text-xl mb-4 text-left leading-relaxed">{paragraph}</p>
               ))
             ) : (
-              <p className="text-xl mb-8 text-left">{activeContent.p}</p>
+              <p className="text-xl mb-8 text-left leading-relaxed">{activeContent.p}</p>
             )}
           </div>
         </div>
@@ -277,13 +277,13 @@ const Home = () => {
         {/* Mobile content for non-home sections */}
         {activeSection !== 'home' && (
           <div className="lg:hidden absolute inset-x-0 bottom-0 bg-black bg-opacity-80 text-white p-6">
-            <h2 className="text-3xl mb-4 text-left">{activeContent.h1}</h2>
+            <h2 className="text-4xl mb-4 text-left">{activeContent.h1}</h2>
             {Array.isArray(activeContent.p) ? (
               activeContent.p.map((paragraph, index) => (
-                <p key={index} className="text-xl mb-3 text-left">{paragraph}</p>
+                <p key={index} className="text-xl mb-3 text-left leading-relaxed">{paragraph}</p>
               ))
             ) : (
-              <p className="text-xl mb-6 text-left">{activeContent.p}</p>
+              <p className="text-xl mb-6 text-left leading-relaxed">{activeContent.p}</p>
             )}
             <div className="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
               <button
