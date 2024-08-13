@@ -15,11 +15,18 @@ const sectionVideos = {
   blog: "/img/blog.mp4"
 };
 
+type SectionName = 'home' | 'about' | 'services' | 'studio' | 'people' | 'blog';
+
+type ActiveContent = {
+  h1: string;
+  p: string | string[];
+};
+
 const Home = () => {
   const [isLogoHovered, setIsLogoHovered] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState<SectionName>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeContent, setActiveContent] = useState({ h1: '', p: '' });
+  const [activeContent, setActiveContent] = useState<ActiveContent>({ h1: '', p: '' });
   const [showMenu, setShowMenu] = useState(true);
 
   const toggleMobileMenu = () => {
@@ -31,7 +38,7 @@ const Home = () => {
     console.log("Menu state changed:", mobileMenuOpen);
   }, [mobileMenuOpen]);
 
-  const handleNavClick = (section: string) => {
+  const handleNavClick = (section: SectionName) => {
     console.log("Changing to section:", section);
     setActiveSection(section);
     if (section !== 'home') {
@@ -245,13 +252,13 @@ const Home = () => {
         {/* Mobile content for non-home sections */}
         {activeSection !== 'home' && (
           <div className="lg:hidden absolute inset-x-0 bottom-0 bg-black bg-opacity-80 text-white p-6">
-            <h2 className="text-3xl mb-4 text-center">{activeContent.h1}</h2>
+            <h2 className="text-3xl mb-4 text-left">{activeContent.h1}</h2>
             {Array.isArray(activeContent.p) ? (
               activeContent.p.map((paragraph, index) => (
-                <p key={index} className="text-xl mb-3 text-center">{paragraph}</p>
+                <p key={index} className="text-xl mb-3 text-left">{paragraph}</p>
               ))
             ) : (
-              <p className="text-xl mb-6 text-center">{activeContent.p}</p>
+              <p className="text-xl mb-6 text-left">{activeContent.p}</p>
             )}
             <div className="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
               <button
