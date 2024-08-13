@@ -81,19 +81,19 @@ const Home = () => {
         };
       case 'studio':
         return {
+          h1: "Research & Digital Civics",
+          p: [
+            "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can't wait.",
+            "As digital and civic engagement converge, we aim to build product experiences that offset cognitive load and distorted decision-making. ",
+          ]
+        };
+      case 'people':
+        return {
           h1: "People and Partnerships",
           p: [
             "Pulp is a group of seasoned executives, young professionals, and students. Our culture is all about harmonizing experience with fresh perspective.",
             "Shah Ullah, Founder & CEO",
             "Jeff Harris, Chief of Partnerships"
-          ]
-        };
-      case 'people':
-        return {
-          h1: "Research & Digital Civics",
-          p: [
-            "Pulp believes in the power of urgent dialogue to shape communities. We push boundaries in conversation research because informed action can't wait.",
-            "As digital and civic engagement converge, we aim to build product experiences that offset cognitive load and distorted decision-making. ",
           ]
         };
       case 'blog':
