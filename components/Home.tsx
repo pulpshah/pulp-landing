@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { navLinks } from '../constants/data'
 import { useTransition, animated } from 'react-spring';
@@ -124,9 +123,12 @@ const Home = () => {
       {/* Mobile Top Navbar */}
       <nav className='lg:hidden fixed top-0 left-0 right-0 bg-black z-50'>
         <div className='flex justify-between items-center p-4'>
-          <Link href="/">
+          <button
+            onClick={() => handleNavClick('home')}
+            className="focus:outline-none"
+          >
             <Image src="/img/logo.svg" alt="logo" width={120} height={24} />
-          </Link>
+          </button>
           <button 
             onClick={toggleMobileMenu} 
             className="text-white focus:outline-none"
@@ -158,7 +160,7 @@ const Home = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <nav className='hidden lg:flex w-[450px] shadow-sm flex-col relative overflow-hidden'>
+      <nav className='hidden lg:flex w-[450px] shadow-sm flex-col relative overflow-hidden bg-black'>
         {/* Fixed header for Home button */}
         <div className="absolute top-0 left-0 right-0 bg-black border-b border-gray-800 z-30">
           <div className="flex items-center px-6 py-4">
@@ -172,9 +174,14 @@ const Home = () => {
         </div>
 
         {/* Main menu */}
-        <div className={`absolute inset-0 flex items-center justify-center px-20 transition-opacity duration-500 ease-in-out ${showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-20`}>
+        <div className={`absolute inset-0 flex items-center justify-center px-20 transition-opacity duration-500 ease-in-out ${showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-20 bg-black`}>
           <div className="w-full">
-            <Image src="/img/logo.svg" alt="PULP" width={170} height={32} className="mb-16" />
+            <button
+              onClick={() => handleNavClick('home')}
+              className="focus:outline-none"
+            >
+              <Image src="/img/logo.svg" alt="PULP" width={170} height={32} className="mb-16" />
+            </button>
             <ul className='flex flex-col items-start gap-8 w-full'>
               {navLinks.map((link) => (
                 <li key={link.name} className="w-full">
@@ -191,7 +198,7 @@ const Home = () => {
         </div>
 
         {/* Section content */}
-        <div className={`absolute inset-0 flex flex-col justify-center items-start px-20 transition-opacity duration-500 ease-in-out ${!showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-10`}>
+        <div className={`absolute inset-0 flex flex-col justify-center items-start px-20 transition-opacity duration-500 ease-in-out ${!showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-10 bg-black`}>
           <div className="text-white">
             <h2 className="text-4xl lg:text-5xl mb-6 text-left">{activeContent.h1}</h2>
             {Array.isArray(activeContent.p) ? (
@@ -274,20 +281,20 @@ const Home = () => {
           />
         </div>
         
-        {/* Mobile content for non-home sections */}
+        {/* Updated Mobile content for non-home sections */}
         {activeSection !== 'home' && (
-          <div className="lg:hidden absolute inset-x-0 bottom-0 bg-black bg-opacity-80 text-white p-6">
-            <h2 className="text-4xl mb-4 text-left">{activeContent.h1}</h2>
+          <div className="lg:hidden absolute inset-x-0 bottom-0 bg-black bg-opacity-80 text-white p-4 max-h-[50vh] overflow-y-auto">
+            <h2 className="text-2xl mb-2 text-left">{activeContent.h1}</h2>
             {Array.isArray(activeContent.p) ? (
               activeContent.p.map((paragraph, index) => (
-                <p key={index} className="text-xl mb-3 text-left leading-relaxed">{paragraph}</p>
+                <p key={index} className="text-base mb-2 text-left leading-relaxed">{paragraph}</p>
               ))
             ) : (
-              <p className="text-xl mb-6 text-left leading-relaxed">{activeContent.p}</p>
+              <p className="text-base mb-3 text-left leading-relaxed">{activeContent.p}</p>
             )}
-            <div className="flex justify-between items-center mt-6 border-t border-gray-700 pt-4">
+            <div className="flex justify-between items-center mt-3 border-t border-gray-700 pt-3">
               <button
-                className="text-white text-lg hover:text-gray-300 transition-colors focus:outline-none"
+                className="text-white text-sm hover:text-gray-300 transition-colors focus:outline-none"
                 onClick={() => {
                   const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
                   const prevIndex = (currentIndex - 1 + navLinks.length) % navLinks.length;
@@ -297,13 +304,7 @@ const Home = () => {
                 ← Previous
               </button>
               <button
-                className="text-white text-lg hover:text-gray-300 transition-colors focus:outline-none"
-                onClick={() => handleNavClick('home')}
-              >
-                Home
-              </button>
-              <button
-                className="text-white text-lg hover:text-gray-300 transition-colors focus:outline-none"
+                className="text-white text-sm hover:text-gray-300 transition-colors focus:outline-none"
                 onClick={() => {
                   const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
                   const nextIndex = (currentIndex + 1) % navLinks.length;
