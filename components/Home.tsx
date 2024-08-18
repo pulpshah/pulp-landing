@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { navLinks } from '../constants/data'
@@ -43,6 +43,8 @@ const Home = () => {
   const [isVideoLoading, setIsVideoLoading] = useState(true);
   const [videoError, setVideoError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLogoAnimating, setIsLogoAnimating] = useState(false);
+  const logoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const toggleMobileMenu = () => {
     console.log("Toggling menu. Current state:", mobileMenuOpen);
@@ -166,9 +168,11 @@ const Home = () => {
             onClick={toggleMobileMenu} 
             className="text-white focus:outline-none"
           >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <div className={`w-8 h-8 flex flex-col justify-center items-center ${mobileMenuOpen ? 'space-y-0' : 'space-y-2'}`}>
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-1' : ''}`}></span>
+            </div>
           </button>
         </div>
       </nav>
@@ -305,17 +309,25 @@ const Home = () => {
               {/* Centered logo */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div 
-                  className={`cursor-pointer transition-all duration-300 ${isLogoHovered ? 'scale-110 brightness-125 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' : ''}`}
+                  className={`cursor-pointer transition-all duration-300 ${isLogoHovered || isLogoAnimating ? 'scale-110 brightness-125 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' : ''}`}
                   onMouseEnter={() => setIsLogoHovered(true)}
                   onMouseLeave={() => setIsLogoHovered(false)}
                   onClick={() => {
                     const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
                     const nextIndex = (currentIndex + 1) % navLinks.length;
                     handleNavClick(navLinks[nextIndex].name.toLowerCase());
+                    
+                    setIsLogoAnimating(true);
+                    if (logoTimeoutRef.current) {
+                      clearTimeout(logoTimeoutRef.current);
+                    }
+                    logoTimeoutRef.current = setTimeout(() => {
+                      setIsLogoAnimating(false);
+                    }, 300);
                   }}
                 >
                   <Image 
-                    className={`transition-opacity duration-300 ${isLogoHovered ? 'opacity-90' : 'opacity-50'}`}
+                    className={`transition-opacity duration-300 ${isLogoHovered || isLogoAnimating ? 'opacity-90' : 'opacity-50'}`}
                     src="/img/logo.svg" 
                     alt="Centered logo" 
                     width={200} 
