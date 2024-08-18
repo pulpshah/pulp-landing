@@ -23,8 +23,8 @@ const config: Config = {
           '100%': { width: '100%' },
         },
         pulse: {
-          '0%, 100%': { opacity: 1 },
-          '50%': { opacity: .5 },
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
         },
       },
     },
