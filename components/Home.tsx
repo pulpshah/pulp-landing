@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { navLinks } from '../constants/data'
 import { useTransition, animated } from 'react-spring';
@@ -123,12 +124,9 @@ const Home = () => {
       {/* Mobile Top Navbar */}
       <nav className='lg:hidden fixed top-0 left-0 right-0 bg-black z-50'>
         <div className='flex justify-between items-center p-4'>
-          <button
-            onClick={() => handleNavClick('home')}
-            className="focus:outline-none"
-          >
+          <Link href="/" onClick={() => handleNavClick('home')}>
             <Image src="/img/logo.svg" alt="logo" width={120} height={24} />
-          </button>
+          </Link>
           <button 
             onClick={toggleMobileMenu} 
             className="text-white focus:outline-none"
@@ -176,12 +174,9 @@ const Home = () => {
         {/* Main menu */}
         <div className={`absolute inset-0 flex items-center justify-center px-20 transition-opacity duration-500 ease-in-out ${showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'} z-20 bg-black`}>
           <div className="w-full">
-            <button
-              onClick={() => handleNavClick('home')}
-              className="focus:outline-none"
-            >
+            <Link href="/" onClick={() => handleNavClick('home')}>
               <Image src="/img/logo.svg" alt="PULP" width={170} height={32} className="mb-16" />
-            </button>
+            </Link>
             <ul className='flex flex-col items-start gap-8 w-full'>
               {navLinks.map((link) => (
                 <li key={link.name} className="w-full">
@@ -239,11 +234,11 @@ const Home = () => {
       </nav>
       <div className='flex-grow relative overflow-hidden mt-[64px] lg:mt-0'>
         {transitions((style, item) => (
-          <animated.div style={style} className="absolute inset-0">
-            {sectionVideos[item] ? (
-              <div className="relative w-full h-full">
+          <animated.div style={style} className="absolute inset-0 flex flex-col">
+            <div className="relative w-full h-full lg:h-full">
+              {sectionVideos[item] ? (
                 <video
-                  className='w-full h-[calc(100vh-64px)] lg:h-screen object-cover'
+                  className='w-full h-full object-cover'
                   autoPlay
                   loop
                   muted
@@ -252,70 +247,79 @@ const Home = () => {
                   <source src={sectionVideos[item]} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                {item !== 'home' && (
-                  <div className="absolute inset-0  pointer-events-none" />
-                )}
+              ) : (
+                <div className="w-full h-full bg-black flex items-center justify-center text-white text-2xl">
+                  No video available for this section
+                </div>
+              )}
+              {item !== 'home' && (
+                <div className="absolute inset-0 pointer-events-none" />
+              )}
+
+              {/* Centered logo */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div 
+                  className={`cursor-pointer transition-all duration-300 ${isLogoHovered ? 'scale-110 brightness-125 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' : ''}`}
+                  onMouseEnter={() => setIsLogoHovered(true)}
+                  onMouseLeave={() => setIsLogoHovered(false)}
+                  onClick={() => {
+                    const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
+                    const nextIndex = (currentIndex + 1) % navLinks.length;
+                    handleNavClick(navLinks[nextIndex].name.toLowerCase());
+                  }}
+                >
+                  <Image 
+                    className={`transition-opacity duration-300 ${isLogoHovered ? 'opacity-90' : 'opacity-50'}`}
+                    src="/img/logo.svg" 
+                    alt="Centered logo" 
+                    width={200} 
+                    height={40} 
+                  />
+                </div>
               </div>
-            ) : (
-              <div className="w-full h-full bg-black flex items-center justify-center text-white text-2xl">
-                No video available for this section
+            </div>
+            
+            {/* Mobile and tablet content for non-home sections */}
+            {activeSection !== 'home' && (
+              <div className="lg:hidden w-full h-1/2 md:h-1/3 bg-black flex flex-col">
+                <div className="flex-grow overflow-y-auto">
+                  <div className="text-white p-6">
+                    <h2 className="text-4xl mb-4 text-left">{activeContent.h1}</h2>
+                    {Array.isArray(activeContent.p) ? (
+                      activeContent.p.map((paragraph, index) => (
+                        <p key={index} className="text-xl mb-3 text-left leading-relaxed">{paragraph}</p>
+                      ))
+                    ) : (
+                      <p className="text-xl mb-6 text-left leading-relaxed">{activeContent.p}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="sticky bottom-0 flex justify-between items-center border-t border-gray-700 p-4 bg-black">
+                  <button
+                    className="text-white text-lg hover:text-gray-300 transition-colors focus:outline-none"
+                    onClick={() => {
+                      const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
+                      const prevIndex = (currentIndex - 1 + navLinks.length) % navLinks.length;
+                      handleNavClick(navLinks[prevIndex].name.toLowerCase());
+                    }}
+                  >
+                    ← Previous
+                  </button>
+                  <button
+                    className="text-white text-lg hover:text-gray-300 transition-colors focus:outline-none"
+                    onClick={() => {
+                      const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
+                      const nextIndex = (currentIndex + 1) % navLinks.length;
+                      handleNavClick(navLinks[nextIndex].name.toLowerCase());
+                    }}
+                  >
+                    Next →
+                  </button>
+                </div>
               </div>
             )}
           </animated.div>
         ))}
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Image 
-            className={`transition-all duration-300 opacity-50 w-[200px] h-[50px] lg:w-[200px] lg:h-[40px] ${isLogoHovered ? 'opacity-90 scale-110 filter brightness-125 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]' : ''}`}
-            onClick={() => {
-              const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
-              const nextIndex = (currentIndex + 1) % navLinks.length;
-              handleNavClick(navLinks[nextIndex].name.toLowerCase());
-            }}
-            src="/img/logo.svg" 
-            alt="Centered logo" 
-            width={250} 
-            height={40} 
-            onMouseEnter={() => setIsLogoHovered(true)}
-            onMouseLeave={() => setIsLogoHovered(false)}
-          />
-        </div>
-        
-        {/* Updated Mobile content for non-home sections */}
-        {activeSection !== 'home' && (
-          <div className="lg:hidden absolute inset-x-0 bottom-0 bg-black bg-opacity-80 text-white p-4 max-h-[50vh] overflow-y-auto">
-            <h2 className="text-2xl mb-2 text-left">{activeContent.h1}</h2>
-            {Array.isArray(activeContent.p) ? (
-              activeContent.p.map((paragraph, index) => (
-                <p key={index} className="text-base mb-2 text-left leading-relaxed">{paragraph}</p>
-              ))
-            ) : (
-              <p className="text-base mb-3 text-left leading-relaxed">{activeContent.p}</p>
-            )}
-            <div className="flex justify-between items-center mt-3 border-t border-gray-700 pt-3">
-              <button
-                className="text-white text-sm hover:text-gray-300 transition-colors focus:outline-none"
-                onClick={() => {
-                  const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
-                  const prevIndex = (currentIndex - 1 + navLinks.length) % navLinks.length;
-                  handleNavClick(navLinks[prevIndex].name.toLowerCase());
-                }}
-              >
-                ← Previous
-              </button>
-              <button
-                className="text-white text-sm hover:text-gray-300 transition-colors focus:outline-none"
-                onClick={() => {
-                  const currentIndex = navLinks.findIndex(link => link.name.toLowerCase() === activeSection);
-                  const nextIndex = (currentIndex + 1) % navLinks.length;
-                  handleNavClick(navLinks[nextIndex].name.toLowerCase());
-                }}
-              >
-                Next →
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
