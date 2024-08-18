@@ -1,30 +1,46 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-interface DynamicVideoProps {
+export interface DynamicVideoProps {
   src: string;
   onLoad: () => void;
+  onError: (e: Error) => void;
 }
 
-const DynamicVideo: React.FC<DynamicVideoProps> = ({ src, onLoad }) => {
+const DynamicVideo: React.FC<DynamicVideoProps> = ({ src, onLoad, onError }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.src = src;
-      videoRef.current.load();
-      videoRef.current.play().catch(error => console.error('Error playing video:', error));
-    }
-  }, [src]);
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoad = () => {
+      console.log('Video loaded successfully');
+      onLoad();
+    };
+
+    const handleError = (e: Event) => {
+      console.error('Error loading video:', e);
+      onError(new Error('Failed to load video'));
+    };
+
+    video.addEventListener('loadeddata', handleLoad);
+    video.addEventListener('error', handleError);
+
+    return () => {
+      video.removeEventListener('loadeddata', handleLoad);
+      video.removeEventListener('error', handleError);
+    };
+  }, [src, onLoad, onError]);
 
   return (
     <video
       ref={videoRef}
-      className='w-full h-full object-cover'
+      src={src}
       autoPlay
       loop
       muted
       playsInline
-      onLoadedData={onLoad}
+      className="absolute inset-0 w-full h-full object-cover"
     />
   );
 };

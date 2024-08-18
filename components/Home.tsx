@@ -8,7 +8,7 @@ import { useTransition, animated, config } from 'react-spring';
 import dynamic from 'next/dynamic';
 import Preloader from './Preloader';
 import { useMediaQuery } from 'react-responsive';
-import DynamicVideoProps from './DynamicVideo'; // Make sure to import the props type
+import { DynamicVideoProps } from './DynamicVideo'; // Make sure to import the props type
 
 // Dynamically import the video component
 const DynamicVideo = dynamic(() => import('./DynamicVideo'), { ssr: false });
