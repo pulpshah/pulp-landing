@@ -39,6 +39,7 @@ const Home = () => {
   const [showMenu, setShowMenu] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [videoError, setVideoError] = useState<string | null>(null);
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const toggleMobileMenu = () => {
@@ -131,9 +132,10 @@ const Home = () => {
   }, [activeSection]);
 
   const getVideoSource = useCallback((section: SectionName) => {
-    const baseUrl = isMobile ? '/img/mobile' : '/img';
-    return `${baseUrl}/${sectionVideos[section]}`;
-  }, [isMobile]);
+    const videoSource = sectionVideos[section];
+    console.log(`Video source for ${section}:`, videoSource);
+    return videoSource;
+  }, []);
 
   const transitions = getTransitions();
 
@@ -258,22 +260,30 @@ const Home = () => {
                 <>
                   {isVideoLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black">
-                      <Image
-                        src={`/img/placeholders/${item}.jpg`}
-                        alt={`${item} placeholder`}
-                        layout="fill"
-                        objectFit="cover"
-                      />
+                      <p className="text-white">Loading video for {item}...</p>
                     </div>
                   )}
                   <DynamicVideo
                     src={getVideoSource(item)}
                     onLoad={() => {
+                      console.log(`Video for ${item} loaded successfully`);
                       setIsVideoLoaded(true);
                       setIsVideoLoading(false);
                     }}
-                    onLoadStart={() => setIsVideoLoading(true)}
+                    onLoadStart={() => {
+                      console.log(`Started loading video for ${item}`);
+                      setIsVideoLoading(true);
+                    }}
+                    onError={(e) => {
+                      console.error(`Error loading video for ${item}:`, e);
+                      setVideoError(`Error loading video for ${item}`);
+                    }}
                   />
+                  {videoError && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black">
+                      <p className="text-white">{videoError}</p>
+                    </div>
+                  )}
                 </>
               )}
               {item !== 'home' && (
