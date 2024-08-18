@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { navLinks } from '../constants/data'
 import { useTransition, animated, config } from 'react-spring';
 import dynamic from 'next/dynamic';
+import Preloader from './Preloader';
 import { useMediaQuery } from 'react-responsive';
 
 // Dynamically import the video component
@@ -40,7 +41,7 @@ const Home = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoLoading, setIsVideoLoading] = useState(true);
   const [videoError, setVideoError] = useState<string | null>(null);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleMobileMenu = () => {
     console.log("Toggling menu. Current state:", mobileMenuOpen);
@@ -138,6 +139,19 @@ const Home = () => {
   }, []);
 
   const transitions = getTransitions();
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 seconds loading time, adjust as needed
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
 
   return (
     <div className='flex flex-col lg:flex-row h-screen'>
