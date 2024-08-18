@@ -284,10 +284,6 @@ const Home = () => {
                       setIsVideoLoaded(true);
                       setIsVideoLoading(false);
                     }}
-                    onLoadStart={() => {
-                      console.log(`Started loading video for ${item}`);
-                      setIsVideoLoading(true);
-                    }}
                     onError={(e) => {
                       console.error(`Error loading video for ${item}:`, e);
                       setVideoError(`Error loading video for ${item}`);
