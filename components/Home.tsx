@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { navLinks } from '../constants/data'
 import { useTransition, animated, config } from 'react-spring';
 import dynamic from 'next/dynamic';
+import { useMediaQuery } from 'react-responsive';
 
 // Dynamically import the video component
 const DynamicVideo = dynamic(() => import('./DynamicVideo'), { ssr: false });
@@ -37,6 +38,8 @@ const Home = () => {
   const [activeContent, setActiveContent] = useState<ActiveContent>({ h1: '', p: '' });
   const [showMenu, setShowMenu] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const toggleMobileMenu = () => {
     console.log("Toggling menu. Current state:", mobileMenuOpen);
@@ -126,6 +129,11 @@ const Home = () => {
       config: { mass: 1, tension: 280, friction: 60 },
     });
   }, [activeSection]);
+
+  const getVideoSource = useCallback((section: SectionName) => {
+    const baseUrl = isMobile ? '/img/mobile' : '/img';
+    return `${baseUrl}/${sectionVideos[section]}`;
+  }, [isMobile]);
 
   const transitions = getTransitions();
 
@@ -247,10 +255,26 @@ const Home = () => {
           <animated.div style={style} className="absolute inset-0 flex flex-col">
             <div className="relative w-full h-full lg:h-full">
               {sectionVideos[item] && (
-                <DynamicVideo
-                  src={sectionVideos[item]}
-                  onLoad={() => setIsVideoLoaded(true)}
-                />
+                <>
+                  {isVideoLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black">
+                      <Image
+                        src={`/img/placeholders/${item}.jpg`}
+                        alt={`${item} placeholder`}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                  )}
+                  <DynamicVideo
+                    src={getVideoSource(item)}
+                    onLoad={() => {
+                      setIsVideoLoaded(true);
+                      setIsVideoLoading(false);
+                    }}
+                    onLoadStart={() => setIsVideoLoading(true)}
+                  />
+                </>
               )}
               {item !== 'home' && (
                 <div className="absolute inset-0 pointer-events-none" />
