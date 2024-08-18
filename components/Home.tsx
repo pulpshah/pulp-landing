@@ -1,10 +1,14 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { navLinks } from '../constants/data'
-import { useTransition, animated } from 'react-spring';
+import { useTransition, animated, config } from 'react-spring';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the video component
+const DynamicVideo = dynamic(() => import('./DynamicVideo'), { ssr: false });
 
 const sectionVideos = {
   home: "/img/planeVid.mp4",
@@ -32,6 +36,7 @@ const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeContent, setActiveContent] = useState<ActiveContent>({ h1: '', p: '' });
   const [showMenu, setShowMenu] = useState(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const toggleMobileMenu = () => {
     console.log("Toggling menu. Current state:", mobileMenuOpen);
@@ -112,12 +117,17 @@ const Home = () => {
     }
   };
 
-  const transitions = useTransition(activeSection, {
-    from: { transform: 'translateX(100%)' },
-    enter: { transform: 'translateX(0%)' },
-    leave: { transform: 'translateX(-100%)' },
-    config: { mass: 1, tension: 280, friction: 60 },
-  });
+  // Memoize the transition configuration
+  const getTransitions = useCallback(() => {
+    return useTransition(activeSection, {
+      from: { transform: 'translateX(100%)' },
+      enter: { transform: 'translateX(0%)' },
+      leave: { transform: 'translateX(-100%)' },
+      config: { mass: 1, tension: 280, friction: 60 },
+    });
+  }, [activeSection]);
+
+  const transitions = getTransitions();
 
   return (
     <div className='flex flex-col lg:flex-row h-screen'>
@@ -236,21 +246,11 @@ const Home = () => {
         {transitions((style, item) => (
           <animated.div style={style} className="absolute inset-0 flex flex-col">
             <div className="relative w-full h-full lg:h-full">
-              {sectionVideos[item] ? (
-                <video
-                  className='w-full h-full object-cover'
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                >
-                  <source src={sectionVideos[item]} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <div className="w-full h-full bg-black flex items-center justify-center text-white text-2xl">
-                  No video available for this section
-                </div>
+              {sectionVideos[item] && (
+                <DynamicVideo
+                  src={sectionVideos[item]}
+                  onLoad={() => setIsVideoLoaded(true)}
+                />
               )}
               {item !== 'home' && (
                 <div className="absolute inset-0 pointer-events-none" />
