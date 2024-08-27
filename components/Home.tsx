@@ -17,9 +17,9 @@ const sectionVideos = {
   home: "/img/planeVid.mp4",
   about: "/img/brain.mp4",
   services: "/img/sea.mp4",
-  studio: "/img/telescope.mp4",
+  studio: "/img/studio.mp4",
   people: "/img/square.mp4",
-  blog: "/img/studio.mp4"
+  blog: "/img/telescope.mp4"
 };
 
 type SectionName = 'home' | 'about' | 'services' | 'studio' | 'people' | 'blog';
